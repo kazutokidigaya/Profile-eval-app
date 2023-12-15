@@ -42,13 +42,19 @@ export async function loadS3IntoPinecone(fileKey: string) {
 
   // 4. upload to pinecone
   const client = await getPineconeClient();
-  const pineconeIndex = await client.index("chatpdf");
-  const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
+  const pineconeIndex = await client.index('chatpdf');
+
+         // Upgraded pinecone tier  needed to Namespace
+        // const namespace = pineconeIndex.namespace(convertToAscii(fileKey));
 
   console.log("inserting vectors into pinecone");
-  await namespace.upsert(vectors);
+  await pineconeIndex.upsert(vectors);
+  
+        // upgraded pinecone tier needed for Namespace
+       // await namespace.upsert(vectors);
 
-  return documents[0];
+  return documents[0]
+
 }
 
 async function embedDocument(doc: Document) {
